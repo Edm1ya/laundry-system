@@ -11,8 +11,11 @@ use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,14 +34,26 @@ class OrderResource extends Resource
                     ->required()
                     ->options(fn() => Customer::query()->get()->pluck('name', 'id')),
                 TextInput::make('garment_quantity')
+                    ->numeric()
+                    ->minValue(1)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::calculatePrice($get, $set);
+                    })->live()
                     ->required(),
                 Select::make('service_type')
-                    // ->options(fn() => ServiceTypeEnum::cases())
+                    ->options(fn() => ServiceTypeEnum::indexed())
                     ->required(),
                 TextInput::make('unit_price')
+                    ->numeric()
+                    ->minValue(1)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::calculatePrice($get, $set);
+                    })->live()
                     ->required(),
                 TextInput::make('total_price')
-                    ->required(),
+                    ->readOnly()
+                    ->numeric()
+                    ->minValue(1),
             ]);
     }
 
@@ -46,7 +61,11 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('customer.name'),
+                TextColumn::make('garment_quantity'),
+                TextColumn::make('service_type'),
+                TextColumn::make('unit_price'),
+                TextColumn::make('total_price'),
             ])
             ->filters([
                 //
@@ -75,5 +94,12 @@ class OrderResource extends Resource
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
+    }
+
+    public static function calculatePrice(Get $get, Set $set)
+    {
+        $garmentQuantity = $get('garment_quantity') != "" ? $get('garment_quantity') : 0;
+        $unitPrice = $get('unit_price') != "" ? $get('unit_price') : 0;
+        $set('total_price', $garmentQuantity * $unitPrice);
     }
 }
