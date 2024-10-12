@@ -65,7 +65,8 @@ class OrderResource extends Resource
                 TextColumn::make('garment_quantity'),
                 TextColumn::make('service_type'),
                 TextColumn::make('unit_price'),
-                TextColumn::make('total_price'),
+                TextColumn::make('total_price')
+                ->money(),
             ])
             ->filters([
                 //

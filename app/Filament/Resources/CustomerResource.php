@@ -6,6 +6,7 @@ use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,16 +25,19 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->maxValue(255)
-                    ->required(),
-                TextInput::make('email')
-                    ->email()
-                    ->required(),
-                TextInput::make('phone')
-                    ->maxLength(15)
-                    ->tel(),
-                TextInput::make('address'),
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->maxValue(255)
+                            ->required(),
+                        TextInput::make('email')
+                            ->email()
+                            ->required(),
+                        TextInput::make('phone')
+                            ->maxLength(15)
+                            ->tel(),
+                        TextInput::make('address'),
+                    ])->columns(2)
             ]);
     }
 
@@ -65,8 +69,9 @@ class CustomerResource extends Resource
 
     public static function getRelations(): array
     {
+
         return [
-            //
+            RelationManagers\OrdersRelationManager::class,
         ];
     }
 
