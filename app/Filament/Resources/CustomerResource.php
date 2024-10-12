@@ -28,15 +28,23 @@ class CustomerResource extends Resource
                 Section::make()
                     ->schema([
                         TextInput::make('name')
+                            ->label("Name")
+                            ->translateLabel()
                             ->maxValue(255)
                             ->required(),
                         TextInput::make('email')
+                            ->label("Email")
+                            ->translateLabel()
                             ->email()
                             ->required(),
                         TextInput::make('phone')
+                            ->label("Phone")
+                            ->translateLabel()
                             ->maxLength(15)
                             ->tel(),
-                        TextInput::make('address'),
+                        TextInput::make('address')
+                            ->label("Address")
+                            ->translateLabel(),
                     ])->columns(2)
             ]);
     }

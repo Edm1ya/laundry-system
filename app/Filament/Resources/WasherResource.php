@@ -34,16 +34,24 @@ class WasherResource extends Resource
                 Section::make('')
                     ->schema([
                         TextInput::make('name')
-                        ->maxLength('255')
-                        ->required(),
+                            ->label("Name")
+                            ->translateLabel()
+                            ->maxLength('255')
+                            ->required(),
                         Select::make('service_type')
-                        ->options(fn() => ServiceTypeEnum::indexed())
-                        ->required(),
+                            ->label("Type of washing")
+                            ->translateLabel()
+                            ->options(fn() => ServiceTypeEnum::indexed())
+                            ->required(),
                         TextInput::make('garment_quantity')
+                            ->label("Maximum number of pieces")
+                            ->translateLabel()
                             ->numeric()
                             ->minValue(1)
                             ->required(),
-                            Toggle::make('in_use')
+                        Toggle::make('in_use')
+                            ->label("In use")
+                            ->translateLabel()
                             ->default(false),
                     ])->columns(2)
             ]);

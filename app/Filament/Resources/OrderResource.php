@@ -35,9 +35,13 @@ class OrderResource extends Resource
                 Section::make('')
                     ->schema([
                         Select::make('customer_id')
+                            ->label("Customer")
+                            ->translateLabel()
                             ->required()
                             ->options(fn() => Customer::query()->get()->pluck('name', 'id')),
                         TextInput::make('garment_quantity')
+                            ->label("Garment quantity")
+                            ->translateLabel()
                             ->numeric()
                             ->minValue(1)
                             ->afterStateUpdated(function (Get $get, Set $set) {
@@ -45,10 +49,14 @@ class OrderResource extends Resource
                             })->live()
                             ->required(),
                         Select::make('service_type')
+                            ->label("Service type")
+                            ->translateLabel()
                             ->options(fn() => ServiceTypeEnum::indexed())
                             ->required()
                             ->live(),
                         TextInput::make('unit_price')
+                            ->label("Unit price")
+                            ->translateLabel()
                             ->numeric()
                             ->minValue(1)
                             ->afterStateUpdated(function (Get $get, Set $set) {
@@ -56,10 +64,14 @@ class OrderResource extends Resource
                             })->live()
                             ->required(),
                         TextInput::make('total_price')
+                            ->label("Total")
+                            ->translateLabel()
                             ->readOnly()
                             ->numeric()
                             ->minValue(1),
                         Select::make('washer_id')
+                            ->label("Washer")
+                            ->translateLabel()
                             ->options(function (Get $get) {
                                 $typeService = $get('service_type');
                                 return Washer::query()
