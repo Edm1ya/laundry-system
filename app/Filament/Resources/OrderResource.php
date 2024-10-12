@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\ServiceTypeEnum;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -30,30 +31,33 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('customer_id')
-                    ->required()
-                    ->options(fn() => Customer::query()->get()->pluck('name', 'id')),
-                TextInput::make('garment_quantity')
-                    ->numeric()
-                    ->minValue(1)
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        self::calculatePrice($get, $set);
-                    })->live()
-                    ->required(),
-                Select::make('service_type')
-                    ->options(fn() => ServiceTypeEnum::indexed())
-                    ->required(),
-                TextInput::make('unit_price')
-                    ->numeric()
-                    ->minValue(1)
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        self::calculatePrice($get, $set);
-                    })->live()
-                    ->required(),
-                TextInput::make('total_price')
-                    ->readOnly()
-                    ->numeric()
-                    ->minValue(1),
+                Section::make('')
+                    ->schema([
+                        Select::make('customer_id')
+                            ->required()
+                            ->options(fn() => Customer::query()->get()->pluck('name', 'id')),
+                        TextInput::make('garment_quantity')
+                            ->numeric()
+                            ->minValue(1)
+                            ->afterStateUpdated(function (Get $get, Set $set) {
+                                self::calculatePrice($get, $set);
+                            })->live()
+                            ->required(),
+                        Select::make('service_type')
+                            ->options(fn() => ServiceTypeEnum::indexed())
+                            ->required(),
+                        TextInput::make('unit_price')
+                            ->numeric()
+                            ->minValue(1)
+                            ->afterStateUpdated(function (Get $get, Set $set) {
+                                self::calculatePrice($get, $set);
+                            })->live()
+                            ->required(),
+                        TextInput::make('total_price')
+                            ->readOnly()
+                            ->numeric()
+                            ->minValue(1),
+                    ])->columns(2)
             ]);
     }
 
@@ -62,11 +66,12 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('customer.name'),
+                TextColumn::make('status'),
                 TextColumn::make('garment_quantity'),
                 TextColumn::make('service_type'),
                 TextColumn::make('unit_price'),
                 TextColumn::make('total_price')
-                ->money(),
+                    ->money(),
             ])
             ->filters([
                 //
