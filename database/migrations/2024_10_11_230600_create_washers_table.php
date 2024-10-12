@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('washers', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->enum("service_type", ["lavado", "planchado", "secado"]);
             $table->integer('garment_quantity');
             $table->boolean('in_use')->default(false);

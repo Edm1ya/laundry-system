@@ -10,8 +10,14 @@ class Washer extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         "service_type",
         "garment_quantity",
         "in_use",
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

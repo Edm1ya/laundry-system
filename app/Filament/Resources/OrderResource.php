@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Washer;
 use App\ServiceTypeEnum;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
@@ -45,7 +46,8 @@ class OrderResource extends Resource
                             ->required(),
                         Select::make('service_type')
                             ->options(fn() => ServiceTypeEnum::indexed())
-                            ->required(),
+                            ->required()
+                            ->live(),
                         TextInput::make('unit_price')
                             ->numeric()
                             ->minValue(1)
@@ -57,6 +59,15 @@ class OrderResource extends Resource
                             ->readOnly()
                             ->numeric()
                             ->minValue(1),
+                        Select::make('washer_id')
+                            ->options(function (Get $get) {
+                                $typeService = $get('service_type');
+                                return Washer::query()
+                                    ->where('service_type', $typeService)
+                                    ->Where('in_use', false)
+                                    ->get()
+                                    ->pluck('name', 'id');
+                            })
                     ])->columns(2)
             ]);
     }

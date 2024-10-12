@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\Washer;
 use App\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +17,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Customer::class)->constrained();
+            $table->foreignIdFor(Washer::class)->constrained();
             $table->integer('garment_quantity');
             $table->enum("service_type", ["lavado", "planchado", "secado"]);
             $table->float('unit_price');

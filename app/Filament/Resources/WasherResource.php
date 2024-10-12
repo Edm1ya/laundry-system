@@ -33,6 +33,9 @@ class WasherResource extends Resource
             ->schema([
                 Section::make('')
                     ->schema([
+                        TextInput::make('name')
+                        ->maxLength('255')
+                        ->required(),
                         Select::make('service_type')
                         ->options(fn() => ServiceTypeEnum::indexed())
                         ->required(),
@@ -50,6 +53,7 @@ class WasherResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('name'),
                 TextColumn::make('service_type'),
                 TextColumn::make('garment_quantity'),
                 ToggleColumn::make('in_use'),

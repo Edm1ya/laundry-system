@@ -11,6 +11,7 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'washer_id',
         'garment_quantity',
         'service_type',
         'unit_price',
@@ -20,5 +21,10 @@ class Order extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function washer()
+    {
+        return $this->belongsTo(Washer::class);
     }
 }
