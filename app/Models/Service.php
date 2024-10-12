@@ -14,4 +14,9 @@ class Service extends Model
         'description',
         'unit_price',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

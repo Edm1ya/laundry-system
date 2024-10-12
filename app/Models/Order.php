@@ -12,9 +12,9 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'washer_id',
+        'service_id',
         'garment_quantity',
         'service_type',
-        'unit_price',
         'total_price',
     ];
 
@@ -26,5 +26,10 @@ class Order extends Model
     public function washer()
     {
         return $this->belongsTo(Washer::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\Service;
 use App\Models\Washer;
 use App\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
@@ -19,8 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Customer::class)->constrained();
             $table->foreignIdFor(Washer::class)->constrained();
             $table->integer('garment_quantity');
-            $table->enum("service_type", ["lavado", "planchado", "secado"]);
-            $table->float('unit_price');
+            $table->foreignIdFor(Service::class)->constrained();
             $table->float('total_price');
             $table->enum('status', ['pending', 'in_progress', 'completed', 'canceled'])->default('pending');
             $table->timestamps();

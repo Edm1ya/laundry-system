@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Service;
 use App\Models\Washer;
 use App\ServiceTypeEnum;
 use Filament\Forms;
@@ -48,17 +49,24 @@ class OrderResource extends Resource
                                 self::calculatePrice($get, $set);
                             })->live()
                             ->required(),
-                        Select::make('service_type')
+                        Select::make('service_id')
                             ->label("Service type")
                             ->translateLabel()
-                            ->options(fn() => ServiceTypeEnum::indexed())
+                            ->options(fn() => Service::query()->get()->pluck('name', 'id'))
                             ->required()
+                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                $query = Service::query()->where('id', $state)->pluck('unit_price')->first();
+                                $set('unit_price',$query);
+
+                                self::calculatePrice($get, $set);
+                            })
                             ->live(),
                         TextInput::make('unit_price')
                             ->label("Unit price")
                             ->translateLabel()
                             ->numeric()
                             ->minValue(1)
+                            ->readOnly()
                             ->afterStateUpdated(function (Get $get, Set $set) {
                                 self::calculatePrice($get, $set);
                             })->live()
