@@ -240,5 +240,7 @@
     "Maximum number of pieces": "Número máximo de piezas",
     "Type of washing": "Tipo de lavadora",
     "Description": "Descripción",
-    "Customer Manager": "Administrador de Clientes"
+    "Customer Manager": "Administrador de Clientes",
+    "Available quantity": "Cantidad disponible",
+    "Reorder point": "Punto de Restablecimiento"
 }
